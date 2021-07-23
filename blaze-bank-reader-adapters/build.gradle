@@ -6,6 +6,9 @@ plugins {
 group 'com.giuseppe.pinto'
 version '1.0.0-SNAPSHOT'
 
+
+
+
 repositories {
     mavenCentral()
 }
@@ -14,6 +17,9 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     testImplementation group: 'org.mockito.kotlin', name: 'mockito-kotlin', version: '3.2.0'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: '2.5.3'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.26'
+    testCompile('org.testcontainers:mysql:1.16.0')
     compile project(':blaze-bank-reader-domain')
 }
 
