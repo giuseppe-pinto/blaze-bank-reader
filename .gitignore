@@ -1,12 +1,4 @@
 .gradle
-**/build/
-!src/**/build/
-/build
-/*/build
-/*/*/build
-/*/*/*/build
-/*/*/*/*/build
-test-splits/
 
 # IDEA
 # ----
