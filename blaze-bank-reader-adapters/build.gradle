@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.5.21'
+    id 'org.jetbrains.kotlin.jvm'
 }
 
 group 'com.giuseppe.pinto'
@@ -11,9 +11,10 @@ repositories {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib"
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testImplementation group: 'org.mockito.kotlin', name: 'mockito-kotlin', version: '3.2.0'
+    compile project(':blaze-bank-reader-domain')
 }
 
 test {

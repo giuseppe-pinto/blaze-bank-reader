@@ -1,2 +1,3 @@
 rootProject.name = 'blaze-bank-reader'
 
+include('blaze-bank-reader-adapters', 'blaze-bank-reader-domain')
