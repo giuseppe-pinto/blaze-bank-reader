@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper
 
 class UserRepositoryMySql(private val jdbcTemplate: JdbcTemplate) : UserRepository {
 
-    override fun getUserInfo(id: Long): User {
+    override fun getUserInfoBy(id: Long): User {
         return jdbcTemplate.query("SELECT * FROM USER WHERE ID=$id", rawMapper()).first()
     }
 

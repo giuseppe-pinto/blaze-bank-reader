@@ -52,7 +52,7 @@ class UserRepositoryMySqlTest {
             "IT"
         )
 
-        val actualUser = sut.getUserInfo(1L)
+        val actualUser = sut.getUserInfoBy(1L)
 
         assertEquals(expectedUser, actualUser)
     }

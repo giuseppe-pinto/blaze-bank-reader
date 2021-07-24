@@ -1,5 +1,5 @@
 package com.giuseppe.pinto.blaze.bank.reader.domain
 
 interface UserRepository {
-    fun getUserInfo(id:Long) : User
+    fun getUserInfoBy(id:Long) : User
 }
