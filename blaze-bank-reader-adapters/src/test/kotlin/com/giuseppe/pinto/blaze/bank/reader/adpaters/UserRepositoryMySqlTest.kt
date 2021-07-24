@@ -81,6 +81,10 @@ class UserRepositoryMySqlTest {
                 "(ID, NAME, LASTNAME, EMAIL, PHONE, ADDRESS, COUNTRY, CITY)" +
                 "VALUES(1, 'giuseppe', 'Pinto', 'cicciopasticcio@gmail.com', '8883434567', 'via da via anfossi 37', 'IT', 'Milan');")
 
+        jdbcTemplate.execute("INSERT INTO `USER`" +
+                "(ID, NAME, LASTNAME, EMAIL, PHONE, ADDRESS, COUNTRY, CITY)" +
+                "VALUES(2, 'dad', 'safas', 'sdas@gmail.com', '8883434567', 'via da via anfossi 37', 'IT', 'Milan');")
+
         txManager.commit(transaction)
 
         return jdbcTemplate
