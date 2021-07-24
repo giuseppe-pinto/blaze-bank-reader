@@ -12,7 +12,18 @@ class UserRepositoryMySql(private val jdbcTemplate: JdbcTemplate) : UserReposito
     }
 
     private fun rawMapper(): RowMapper<User> {
-        TODO("Not yet implemented")
+        return RowMapper { resultSet, _ ->
+            User(
+                resultSet.getLong("ID"),
+                resultSet.getString("NAME"),
+                resultSet.getString("LASTNAME"),
+                resultSet.getString("EMAIL"),
+                resultSet.getString("PHONE"),
+                resultSet.getString("ADDRESS"),
+                resultSet.getString("CITY"),
+                resultSet.getString("COUNTRY")
+            )
+        }
     }
 
 }

@@ -20,7 +20,7 @@ class UserRepositoryMySqlTest {
 
     @BeforeEach
     internal fun setUp() {
-        mysql = MySQLContainer<Nothing>("mysql:5.5.53")
+        mysql = MySQLContainer<Nothing>("mysql:8.0.26")
         mysql.start()
         dataSource = DataSourceBuilder.create()
             .url(mysql.jdbcUrl)
@@ -38,9 +38,29 @@ class UserRepositoryMySqlTest {
     @Test
     internal fun `get the user info`() {
 
+        val jdbcTemplate = createAndInitializeDatabase()
+        val sut = UserRepositoryMySql(jdbcTemplate)
+
+        val expectedUser = User(
+            1L,
+            "giuseppe",
+            "Pinto",
+            "cicciopasticcio@gmail.com",
+            "8883434567",
+            "via da via anfossi 37",
+            "Milan",
+            "IT"
+        )
+
+        val actualUser = sut.getUserInfo(1L)
+
+        assertEquals(expectedUser, actualUser)
+    }
+
+    private fun createAndInitializeDatabase(): JdbcTemplate {
         val txManager = DataSourceTransactionManager(dataSource)
-        val jdbcTemplate = JdbcTemplate(dataSource)
         val transaction = txManager.getTransaction(DefaultTransactionDefinition())
+        val jdbcTemplate = JdbcTemplate(dataSource)
         jdbcTemplate.execute(
             "" +
                     "CREATE TABLE `USER` (" +
@@ -57,23 +77,13 @@ class UserRepositoryMySqlTest {
                     "  KEY `USER_ID_IDX` (`ID`) USING BTREE" +
                     ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"
         )
+        jdbcTemplate.execute("INSERT INTO `USER`" +
+                "(ID, NAME, LASTNAME, EMAIL, PHONE, ADDRESS, COUNTRY, CITY)" +
+                "VALUES(1, 'giuseppe', 'Pinto', 'cicciopasticcio@gmail.com', '8883434567', 'via da via anfossi 37', 'IT', 'Milan');")
+
         txManager.commit(transaction)
 
-        val sut = UserRepositoryMySql(JdbcTemplate(dataSource))
+        return jdbcTemplate
 
-        val expectedUser = User(
-            1L,
-            "giuseppe",
-            "Pinto",
-            "cicciopasticcio@gmail.com",
-            "8883434567",
-            "via da via anfossi 37",
-            "Milan",
-            "IT"
-        )
-
-        val actualUser = sut.getUserInfo(1L)
-
-        assertEquals(expectedUser, actualUser)
     }
 }
