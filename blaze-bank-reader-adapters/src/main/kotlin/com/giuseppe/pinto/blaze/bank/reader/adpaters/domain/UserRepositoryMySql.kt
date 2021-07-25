@@ -1,9 +1,5 @@
-package com.giuseppe.pinto.blaze.bank.reader.adpaters
+package com.giuseppe.pinto.blaze.bank.reader.adpaters.domain
 
-import com.giuseppe.pinto.blaze.bank.reader.domain.NotPresentUser
-import com.giuseppe.pinto.blaze.bank.reader.domain.PresentUser
-import com.giuseppe.pinto.blaze.bank.reader.domain.User
-import com.giuseppe.pinto.blaze.bank.reader.domain.UserRepository
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 

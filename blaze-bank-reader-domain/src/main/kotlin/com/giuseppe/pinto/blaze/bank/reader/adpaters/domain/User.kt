@@ -1,4 +1,4 @@
-package com.giuseppe.pinto.blaze.bank.reader.domain
+package com.giuseppe.pinto.blaze.bank.reader.adpaters.domain
 
 sealed class User
 
