@@ -20,7 +20,7 @@ class TransactionRepositoryMySql(private val jdbcTemplate: JdbcTemplate) : Trans
         }
     }
 
-    override fun getTransactionOf(userId: Long): List<Transaction> {
+    override fun getTransactionsOf(userId: Long): List<Transaction> {
         val transactions = jdbcTemplate.query("SELECT * FROM TRANSACTION WHERE USER_ID=$userId", rawMapper())
 
         return when {

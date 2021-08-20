@@ -80,7 +80,7 @@ class TransactionRepositoryMySqlTest {
             )
         )
 
-        val actualTransactions = sut.getTransactionOf(userId)
+        val actualTransactions = sut.getTransactionsOf(userId)
 
         assertEquals(expectedTransactions, actualTransactions)
     }
@@ -91,7 +91,7 @@ class TransactionRepositoryMySqlTest {
 
         val sut = TransactionRepositoryMySql(jdbcTemplate)
 
-        val actualTransactions = sut.getTransactionOf(notPresentUser)
+        val actualTransactions = sut.getTransactionsOf(notPresentUser)
 
         val expectedTransactions = listOf<NotPresentTransaction>()
         assertEquals(expectedTransactions, actualTransactions)
