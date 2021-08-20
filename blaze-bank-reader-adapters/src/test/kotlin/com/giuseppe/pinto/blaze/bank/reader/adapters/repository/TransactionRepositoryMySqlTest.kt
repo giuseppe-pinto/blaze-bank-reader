@@ -2,6 +2,7 @@ package com.giuseppe.pinto.blaze.bank.reader.adapters.repository
 
 import com.giuseppe.pinto.blaze.bank.reader.domain.model.NotPresentTransaction
 import com.giuseppe.pinto.blaze.bank.reader.domain.model.PresentTransaction
+import com.giuseppe.pinto.blaze.bank.reader.domain.model.TransactionType.DEPOSIT
 import com.giuseppe.pinto.blaze.bank.reader.domain.model.TransactionType.WITHDRAWAL
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -49,6 +50,52 @@ class TransactionRepositoryMySqlTest {
     }
 
 
+    @Test
+    fun `get transactions from user id`() {
+        val userId = 1L
+
+        val sut = TransactionRepositoryMySql(jdbcTemplate)
+
+        val expectedTransactions = listOf(
+            PresentTransaction(
+                1L,
+                DEPOSIT,
+                BigDecimal("100.00"),
+                "DEPOSIT FOR RENT",
+                userId
+            ),
+            PresentTransaction(
+                2L,
+                WITHDRAWAL,
+                BigDecimal("50.00"),
+                "WITHDRAWAL FOR RENT",
+                userId
+            ),
+            PresentTransaction(
+                150L,
+                WITHDRAWAL,
+                BigDecimal("50.00"),
+                "WITHDRAWAL FOR RENT",
+                userId
+            )
+        )
+
+        val actualTransactions = sut.getTransactionOf(userId)
+
+        assertEquals(expectedTransactions, actualTransactions)
+    }
+
+    @Test
+    fun `not present transactions for a user`() {
+        val notPresentUser = 200L
+
+        val sut = TransactionRepositoryMySql(jdbcTemplate)
+
+        val actualTransactions = sut.getTransactionOf(notPresentUser)
+
+        val expectedTransactions = listOf<NotPresentTransaction>()
+        assertEquals(expectedTransactions, actualTransactions)
+    }
 
     companion object {
 
@@ -113,6 +160,10 @@ class TransactionRepositoryMySqlTest {
                 "INSERT INTO TRANSACTION_TYPE (`TYPE`, DESCRIPTION) VALUES" +
                         "('WITHDRAWAL', 'WITHDRAWAL DESCRIPTION');"
             )
+            jdbcTemplate.execute(
+                "INSERT INTO TRANSACTION_TYPE (`TYPE`, DESCRIPTION) VALUES" +
+                        "('DEPOSIT', 'DEPOSIT DESCRIPTION');"
+            )
 
             jdbcTemplate.execute(
                 "CREATE TABLE `TRANSACTION` (" +
@@ -133,6 +184,16 @@ class TransactionRepositoryMySqlTest {
             jdbcTemplate.execute(
                 "INSERT INTO `TRANSACTION` ( ID,`TYPE`, AMOUNT, DESCRIPTION, USER_ID) " +
                         "VALUES(150, 'WITHDRAWAL', 50.00, 'WITHDRAWAL FOR RENT', 1);"
+            )
+
+            jdbcTemplate.execute(
+                "INSERT INTO `TRANSACTION` ( ID,`TYPE`, AMOUNT, DESCRIPTION, USER_ID) " +
+                        "VALUES(1, 'DEPOSIT', 100.00, 'DEPOSIT FOR RENT', 1);"
+            )
+
+            jdbcTemplate.execute(
+                "INSERT INTO `TRANSACTION` ( ID,`TYPE`, AMOUNT, DESCRIPTION, USER_ID) " +
+                        "VALUES(2, 'WITHDRAWAL', 50.00, 'WITHDRAWAL FOR RENT', 1);"
             )
 
             txManager.commit(transaction)

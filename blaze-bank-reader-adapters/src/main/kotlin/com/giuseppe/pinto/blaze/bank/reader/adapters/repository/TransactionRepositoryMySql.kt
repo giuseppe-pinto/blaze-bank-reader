@@ -11,12 +11,21 @@ import org.springframework.jdbc.core.RowMapper
 class TransactionRepositoryMySql(private val jdbcTemplate: JdbcTemplate) : TransactionRepository {
 
 
-    override fun getTransactionBy(id: Long): Transaction {
-        val transactions = jdbcTemplate.query("SELECT * FROM TRANSACTION WHERE ID=$id", rawMapper())
+    override fun getTransactionBy(transactionId: Long): Transaction {
+        val transactions = jdbcTemplate.query("SELECT * FROM TRANSACTION WHERE ID=$transactionId", rawMapper())
 
         return when {
             transactions.isEmpty() -> NotPresentTransaction
             else ->  transactions.first()
+        }
+    }
+
+    override fun getTransactionOf(userId: Long): List<Transaction> {
+        val transactions = jdbcTemplate.query("SELECT * FROM TRANSACTION WHERE USER_ID=$userId", rawMapper())
+
+        return when {
+            transactions.isEmpty() -> listOf<NotPresentTransaction>()
+            else ->  transactions
         }
     }
 
