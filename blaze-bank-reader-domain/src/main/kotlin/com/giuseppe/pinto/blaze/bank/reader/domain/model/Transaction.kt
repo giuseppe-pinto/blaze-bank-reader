@@ -1,4 +1,4 @@
-package com.giuseppe.pinto.blaze.bank.reader.adpaters.domain
+package com.giuseppe.pinto.blaze.bank.reader.domain.model
 import java.math.BigDecimal
 
 sealed class Transaction

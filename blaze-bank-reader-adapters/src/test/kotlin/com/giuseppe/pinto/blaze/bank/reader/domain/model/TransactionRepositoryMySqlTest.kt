@@ -1,6 +1,6 @@
-package com.giuseppe.pinto.blaze.bank.reader.adpaters.domain
+package com.giuseppe.pinto.blaze.bank.reader.domain.model
 
-import com.giuseppe.pinto.blaze.bank.reader.adpaters.domain.TransactionType.WITHDRAWAL
+import com.giuseppe.pinto.blaze.bank.reader.domain.model.TransactionType.WITHDRAWAL
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll

@@ -1,5 +1,6 @@
-package com.giuseppe.pinto.blaze.bank.reader.adpaters.domain
+package com.giuseppe.pinto.blaze.bank.reader.domain.model
 
+import com.giuseppe.pinto.blaze.bank.reader.domain.repository.TransactionRepository
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 
