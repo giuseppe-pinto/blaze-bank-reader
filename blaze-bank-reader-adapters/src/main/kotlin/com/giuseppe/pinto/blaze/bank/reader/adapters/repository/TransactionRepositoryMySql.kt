@@ -1,5 +1,9 @@
-package com.giuseppe.pinto.blaze.bank.reader.domain.model
+package com.giuseppe.pinto.blaze.bank.reader.adapters.repository
 
+import com.giuseppe.pinto.blaze.bank.reader.domain.model.NotPresentTransaction
+import com.giuseppe.pinto.blaze.bank.reader.domain.model.PresentTransaction
+import com.giuseppe.pinto.blaze.bank.reader.domain.model.Transaction
+import com.giuseppe.pinto.blaze.bank.reader.domain.model.TransactionType
 import com.giuseppe.pinto.blaze.bank.reader.domain.repository.TransactionRepository
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper

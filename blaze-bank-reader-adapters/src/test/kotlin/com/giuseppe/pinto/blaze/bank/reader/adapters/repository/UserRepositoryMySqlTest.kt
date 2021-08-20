@@ -1,6 +1,7 @@
-package com.giuseppe.pinto.blaze.bank.reader.domain.model
+package com.giuseppe.pinto.blaze.bank.reader.adapters.repository
 
-import com.giuseppe.pinto.blaze.bank.reader.domain.model.TransactionType.WITHDRAWAL
+import com.giuseppe.pinto.blaze.bank.reader.domain.model.NotPresentUser
+import com.giuseppe.pinto.blaze.bank.reader.domain.model.PresentUser
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
@@ -10,46 +11,42 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.datasource.DataSourceTransactionManager
 import org.springframework.transaction.support.DefaultTransactionDefinition
 import org.testcontainers.containers.MySQLContainer
-import java.math.BigDecimal
 import javax.sql.DataSource
 
-class TransactionRepositoryMySqlTest {
+
+class UserRepositoryMySqlTest {
 
     @Test
-    fun `get a transaction by id`() {
-        val userId = 1L
-        val transactionId = 150L
+    fun `get the user info`() {
 
-        val sut = TransactionRepositoryMySql(jdbcTemplate)
+        val sut = UserRepositoryMySql(jdbcTemplate)
 
-        val expectedTransaction = PresentTransaction(
-            transactionId,
-            WITHDRAWAL,
-            BigDecimal("50.00"),
-            "WITHDRAWAL FOR RENT",
-            userId
+        val expectedUser = PresentUser(
+            1L,
+            "giuseppe",
+            "Pinto",
+            "cicciopasticcio@gmail.com",
+            "8883434567",
+            "via da via anfossi 37",
+            "Milan",
+            "IT"
         )
 
-        val actualTransaction = sut.getTransactionBy(transactionId)
+        val actualUser = sut.getUserInfoBy(1L)
 
-        assertEquals(expectedTransaction, actualTransaction)
+        assertEquals(expectedUser, actualUser)
     }
 
     @Test
-    fun `transaction not present`() {
+    fun `user not present`() {
 
-        val notPresentTransactionId = 0L
-        val expectedTransaction = NotPresentTransaction
-
-        val sut = TransactionRepositoryMySql(jdbcTemplate)
-        val actualTransaction = sut.getTransactionBy(notPresentTransactionId)
-        assertEquals(expectedTransaction, actualTransaction)
+        val idNotPresent = 123L
+        val sut = UserRepositoryMySql(jdbcTemplate)
+        val actualUser = sut.getUserInfoBy(idNotPresent)
+        assertEquals(NotPresentUser, actualUser)
     }
 
-
-
     companion object {
-
         lateinit var mysql: MySQLContainer<Nothing>
         lateinit var dataSource: DataSource
         lateinit var jdbcTemplate: JdbcTemplate
@@ -79,7 +76,6 @@ class TransactionRepositoryMySqlTest {
             val txManager = DataSourceTransactionManager(dataSource)
             val transaction = txManager.getTransaction(DefaultTransactionDefinition())
             val jdbcTemplate = JdbcTemplate(dataSource)
-
             jdbcTemplate.execute(
                 "" +
                         "CREATE TABLE `USER` (" +
@@ -100,38 +96,9 @@ class TransactionRepositoryMySqlTest {
                     "(ID, NAME, LASTNAME, EMAIL, PHONE, ADDRESS, COUNTRY, CITY)" +
                     "VALUES(1, 'giuseppe', 'Pinto', 'cicciopasticcio@gmail.com', '8883434567', 'via da via anfossi 37', 'IT', 'Milan');")
 
-            jdbcTemplate.execute(
-                        "CREATE TABLE `TRANSACTION_TYPE` (" +
-                        "  `TYPE` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL," +
-                        "  `DESCRIPTION` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL," +
-                        "  PRIMARY KEY (`TYPE`)" +
-                        ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"
-            )
-            jdbcTemplate.execute(
-                "INSERT INTO TRANSACTION_TYPE (`TYPE`, DESCRIPTION) VALUES" +
-                        "('WITHDRAWAL', 'WITHDRAWAL DESCRIPTION');"
-            )
-
-            jdbcTemplate.execute(
-                "CREATE TABLE `TRANSACTION` (" +
-                        "  `ID` bigint NOT NULL AUTO_INCREMENT," +
-                        "  `TYPE` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL," +
-                        "  `AMOUNT` decimal(15,2) NOT NULL," +
-                        "  `DESCRIPTION` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL," +
-                        "  `USER_ID` bigint NOT NULL," +
-                        "  PRIMARY KEY (`ID`)," +
-                        "  UNIQUE KEY `TRANSACTION_UN` (`ID`,`USER_ID`)," +
-                        "  KEY `TRANSACTION_FK` (`USER_ID`)," +
-                        "  KEY `TRANSACTION_FK_1` (`TYPE`)," +
-                        "  KEY `TRANSACTION_ID_IDX` (`ID`,`USER_ID`) USING BTREE," +
-                        "  CONSTRAINT `TRANSACTION_FK` FOREIGN KEY (`USER_ID`) REFERENCES `USER` (`ID`)," +
-                        "  CONSTRAINT `TRANSACTION_FK_1` FOREIGN KEY (`TYPE`) REFERENCES `TRANSACTION_TYPE` (`TYPE`) ON UPDATE CASCADE" +
-                        ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"
-            )
-            jdbcTemplate.execute(
-                "INSERT INTO `TRANSACTION` ( ID,`TYPE`, AMOUNT, DESCRIPTION, USER_ID) " +
-                        "VALUES(150, 'WITHDRAWAL', 50.00, 'WITHDRAWAL FOR RENT', 1);"
-            )
+            jdbcTemplate.execute("INSERT INTO `USER`" +
+                    "(ID, NAME, LASTNAME, EMAIL, PHONE, ADDRESS, COUNTRY, CITY)" +
+                    "VALUES(2, 'dad', 'safas', 'sdas@gmail.com', '8883434567', 'via da via anfossi 37', 'IT', 'Milan');")
 
             txManager.commit(transaction)
 
