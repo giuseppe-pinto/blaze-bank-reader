@@ -7,13 +7,17 @@ class TransactionRepositoryMySql(private val jdbcTemplate: JdbcTemplate) : Trans
 
 
     override fun getTransactionBy(id: Long): Transaction {
-        return jdbcTemplate.query("SELECT * FROM TRANSACTION WHERE ID=$id", rawMapper()).first()
-    }
+        val transactions = jdbcTemplate.query("SELECT * FROM TRANSACTION WHERE ID=$id", rawMapper())
 
+        return when {
+            transactions.isEmpty() -> NotPresentTransaction
+            else ->  transactions.first()
+        }
+    }
 
     private fun rawMapper(): RowMapper<Transaction> {
         return RowMapper { resultSet, _ ->
-            Transaction(
+            PresentTransaction(
                 resultSet.getLong("ID"),
                 TransactionType.valueOf(resultSet.getString("TYPE").uppercase()),
                 resultSet.getBigDecimal("AMOUNT"),

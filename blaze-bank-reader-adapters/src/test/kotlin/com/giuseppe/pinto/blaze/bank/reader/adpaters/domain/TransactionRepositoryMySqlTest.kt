@@ -22,7 +22,7 @@ class TransactionRepositoryMySqlTest {
 
         val sut = TransactionRepositoryMySql(jdbcTemplate)
 
-        val expectedTransaction = Transaction(
+        val expectedTransaction = PresentTransaction(
             transactionId,
             WITHDRAWAL,
             BigDecimal("50.00"),
@@ -35,8 +35,21 @@ class TransactionRepositoryMySqlTest {
         assertEquals(expectedTransaction, actualTransaction)
     }
 
+    @Test
+    fun `transaction not present`() {
+
+        val notPresentTransactionId = 0L
+        val expectedTransaction = NotPresentTransaction
+
+        val sut = TransactionRepositoryMySql(jdbcTemplate)
+        val actualTransaction = sut.getTransactionBy(notPresentTransactionId)
+        assertEquals(expectedTransaction, actualTransaction)
+    }
+
+
 
     companion object {
+
         lateinit var mysql: MySQLContainer<Nothing>
         lateinit var dataSource: DataSource
         lateinit var jdbcTemplate: JdbcTemplate
