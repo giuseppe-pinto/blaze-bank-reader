@@ -1,3 +1,5 @@
 rootProject.name = 'blaze-bank-reader'
 
-include('blaze-bank-reader-adapters', 'blaze-bank-reader-domain')
+include('blaze-bank-reader-adapters',
+        'blaze-bank-reader-domain',
+        'blaze-bank-reader-web')
